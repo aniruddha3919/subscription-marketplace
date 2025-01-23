@@ -2,19 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('subscriptionForm');
   const subscriptionsDiv = document.getElementById('subscriptions');
 
+  // Render backend URL
+  const backendUrl = 'https://subscription-marketplace.onrender.com';
+
   // Fetch and display subscriptions
   async function fetchSubscriptions() {
     try {
-      const response = await fetch('/subscriptions');
+      const response = await fetch(`${backendUrl}/subscriptions`);
       if (!response.ok) {
         throw new Error('Failed to fetch subscriptions');
       }
-  
+
       const data = await response.json();
       console.log('Fetched subscriptions:', data); // Debugging: Log fetched data
-  
+
       subscriptionsDiv.innerHTML = ''; // Clear the container before adding new content
-  
+
       // Loop through the fetched data and create elements
       data.forEach(sub => {
         const subDiv = document.createElement('div');
@@ -27,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         subscriptionsDiv.appendChild(subDiv); // Add the new subscription to the container
       });
-  
+
       if (data.length === 0) {
         subscriptionsDiv.innerHTML = '<p>No subscriptions available.</p>';
       }
@@ -36,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
       subscriptionsDiv.innerHTML = '<p>Failed to load subscriptions. Please try again later.</p>';
     }
   }
-  
 
   // Add new subscription
   form.addEventListener('submit', async (e) => {
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const whatsappLink = document.getElementById('whatsappLink').value;
 
     try {
-      const response = await fetch('/subscriptions', {
+      const response = await fetch(`${backendUrl}/subscriptions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description, price, whatsapp_link: whatsappLink }),
